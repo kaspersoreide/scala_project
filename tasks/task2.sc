@@ -13,23 +13,15 @@ object Task2 {
   private var counter: Int = 0
 
   def increaseCounter(): Unit = {
-    Thread.sleep(1)
-    // Without this sleep, the thread execution order was basically deterministic. Notice the print function has the
-    // same sleep. The JVM relies heavily on the OS thread implementation, so maybe I have some setting somewhere that
-    // results in this behaviour. Sleeping the same duration in all three threads does introduce randomness to the
-    // execution order though.
-
     counter += 1
   }
 
   def print(): Unit = {
-    Thread.sleep(1)
     println(counter)
   }
 
   def main(args: Array[String]): Unit = {
-    println()
-    for (_ <- 0 until 10) {
+    for (_ <- 0 until 100) {
       counter = 0
       val t1 = thread({ increaseCounter() })
       val t2 = thread({ increaseCounter() })
@@ -45,9 +37,12 @@ object Task2 {
       // Does not proceed until all the threads are done, so one iteration cannot affect the next.
     }
 
-    // The output is either 0, 1 and 2; 2 is the most common output. This happens because the order of execution of
-    // threads is not, as least as it currently is written, determined in advance. Different orderings result in different
-    // behaviour. This is called race conditions.
+    // The output is either 0, 1 and 2; 2 is the most common output. We're talking about one 1 or 0 out hundreds kind of
+    // rare. This happens because the order of execution of threads is not, as least as it currently is written,
+    // determined in advance. Different orderings result in different behaviour. This is called race conditions. It is
+    // often problematic because the designer did not account for the possibility of such events unfolding. An example
+    // of this kind of error might be that a message is attempted sent without the content being initialized, which will
+    // either crash or lead to a nonsensical message.
 
     // C
 
@@ -71,7 +66,7 @@ object Task2 {
     // D
 
     // A deadlock is when two or more executions are blocked by each other in such a way that execution just stops. In
-    // many cases, this blocking is related to resource access.
+    // many cases, this blocking is related to resource access. It can be avoided by
 
     lazy val x: Int = {
       val t = thread { println(s"Initializing $x.") }
@@ -80,5 +75,6 @@ object Task2 {
       1
     }
     x
+    println("Got past deadlock!! Finally!! 😭😭😭😭") // In practice unreachable
   }
 }
