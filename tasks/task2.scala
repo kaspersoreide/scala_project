@@ -55,6 +55,30 @@ object Task2 {
         t4.start
         t5.start
         t6.start
+
+        /* d) */ 
+        object A {
+            lazy val a0 = B.b
+            lazy val a1 = 17
+        }
+
+        object B {
+            lazy val b = A.a1
+        }
+        
+        def init_a() {
+            A.a0
+        } 
+        def init_b() {
+            B.b
+        }
+        val t7 = make_thread(init_a)
+        val t8 = make_thread(init_b)
+        t7.start
+        t8.start
+        t7.join
+        t8.join
+        println("some deadlock going on?")
     }
 }
 
