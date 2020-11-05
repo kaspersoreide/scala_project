@@ -38,11 +38,12 @@ object Task2 {
     }
 
     // The output is either 0, 1 and 2; 2 is the most common output. We're talking about one 1 or 0 out hundreds kind of
-    // rare. This happens because the order of execution of threads is not, as least as it currently is written,
-    // determined in advance. Different orderings result in different behaviour. This is called race conditions. It is
-    // often problematic because the designer did not account for the possibility of such events unfolding. An example
-    // of this kind of error might be that a message is attempted sent without the content being initialized, which will
-    // either crash or lead to a nonsensical message.
+    // rare. If there is problems reproducing anything but 2 with this code, one can try hitting the computer with a
+    // higher computational load simultaneously. This happens because the order of execution of threads is not, as least
+    // as it currently is written, determined in advance. Different orderings result in different behaviour. This is
+    // called race conditions. It is often problematic because the designer did not account for the possibility of such
+    // events unfolding. An example  of this kind of error might be that a message is attempted sent without the content
+    // being initialized, which will either crash or lead to a nonsensical message.
 
     // C
 
@@ -66,7 +67,16 @@ object Task2 {
     // D
 
     // A deadlock is when two or more executions are blocked by each other in such a way that execution just stops. In
-    // many cases, this blocking is related to resource access. It can be avoided by
+    // many cases, this blocking is related to resource access. One way to avoid a deadlock is to introduce a ordering
+    // of resources that all code executions lock resources in. There must be a cyclic dependence of blocking.
+    //     Thread 1 lock a lock b
+    //     Thread 2 lock b lock a
+    // becomes
+    //     Thread 1 lock a lock b
+    //     Thread 2 lock a lock b
+    // .
+    // This change does not ask that the method reorder the order in which values are changed, just the order in which
+    // they are locked or claimed. This way, no cycles of dependence can ever occur.
 
     lazy val x: Int = {
       val t = thread { println(s"Initializing $x.") }
