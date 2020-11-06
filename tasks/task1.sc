@@ -96,7 +96,6 @@ for (i <- 0 until 11) {
 }
 
 // D theory
-// int is a signed list of bits 32 long representing whole numbers.
-// BigInt is theoretically an arbitrary size integer, but the
-// implementations seem to have a limit of about 2 to the power of the
-// max value of int. Operations on ints will typically perform better
+// int is a signed list of bits 32 long representing whole numbers. BigInt is theoretically an arbitrary size integer,
+// and can therefore hold, or represent, much larger whole numbers. Implementations seem to have a limit of about 2 to
+// the power of the max value of int. Operations on ints will typically perform better.
