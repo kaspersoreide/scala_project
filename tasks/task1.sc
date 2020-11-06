@@ -88,8 +88,9 @@ def Fibonacci(n: BigInt): BigInt = {
   }
 }
 
-for (x <- 0 until 11) {
-  println(Fibonacci(BigInt(x)))
+// Print 0-th to 10-th Fibonacci numbers
+for (i <- 0 until 11) {
+  printf("F%d: %d\n", i, Fibonacci(BigInt(i)))
 }
 
 // D theory
