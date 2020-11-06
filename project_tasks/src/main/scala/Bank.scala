@@ -1,3 +1,5 @@
+package scala
+
 class Bank(val allowedAttempts: Integer = 3) {
 
     private val transactionsQueue: TransactionQueue = new TransactionQueue()
