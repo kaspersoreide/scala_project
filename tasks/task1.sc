@@ -2,6 +2,11 @@
 
 // A
 
+/** Return an array containing whole numbers from start to end.
+ *
+ * @param start The first integer in the array.
+ * @param end The integer one larger than the last integer in the array. end cannot be smaller than start.
+ */
 def range(start: Int, end: Int): Array[Int] = {
   val array: Array[Int] = new Array[Int](end)
   for (i: Int <- start until end) {
@@ -17,6 +22,12 @@ val array50: Array[Int] = range(0, 50 + 1)
 object sum {
 
   // B definition
+  /** Returns the sum of the integers in iterable.
+   *
+   * This method employs a for loop to calculate the sum.
+   *
+   * @param iterable Iterable to get integers to sum from.
+   */
   def loop(iterable: Iterable[Int]): Int = {
     var sum = 0
     for (x <- iterable) {
@@ -26,6 +37,12 @@ object sum {
   }
 
   // C definitions
+  /** Returns the sum of the integers in iterator.
+   *
+   * This method employs recursion to calculate the sum.
+   *
+   * @param iterator Iterator to get integers to sum from.
+   */
   def recursion(iterator: Iterator[Int]): Int = {
     if (iterator.hasNext) {
       iterator.next + recursion(iterator)
@@ -34,6 +51,12 @@ object sum {
     }
   }
 
+  /** Returns the sum of the integers in iterable.
+   *
+   * This method employs recursion to calculate the sum.
+   *
+   * @param iterable Iterable to get integers to sum from.
+   */
   def recursion(iterable: Iterable[Int]): Int = {
     recursion(iterable.iterator)
   }
@@ -52,6 +75,11 @@ import scala.math.BigInt
 
 val zero = BigInt(0)
 val one = BigInt(1)
+
+/** Returns the n-th Fibonacci number.
+ *
+ * @param n Index of Fibonacci number to return.
+ */
 def Fibonacci(n: BigInt): BigInt = {
   n match {
     case `zero` => zero
