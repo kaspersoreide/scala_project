@@ -48,23 +48,23 @@ class Transaction(val transactionsQueue: TransactionQueue,
   var status: TransactionStatus.Value = TransactionStatus.PENDING
   var attempt = 0
 
-  override def run: Unit = {
+  override def run(): Unit = {
 
-      def doTransaction() = {
-          // TODO - project task 3
-          // Extend this method to satisfy requirements.
-          from withdraw amount
-          to deposit amount
-      }
-
+    def doTransaction(): Unit = {
       // TODO - project task 3
-      // make the code below thread safe
-      if (status == TransactionStatus.PENDING) {
-          doTransaction
-          Thread.sleep(50) // you might want this to make more room for
-                           // new transactions to be added to the queue
-      }
-
-
+      // Extend this method to satisfy requirements.
+      from withdraw amount
+      to deposit amount
     }
+
+    // TODO - project task 3
+    // make the code below thread safe
+    if (status == TransactionStatus.PENDING) {
+      doTransaction
+      Thread.sleep(50) // you might want this to make more room for
+      // new transactions to be added to the queue
+    }
+
+
+  }
 }
