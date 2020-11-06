@@ -1,3 +1,4 @@
+package scala
 
 object Main extends App {
 

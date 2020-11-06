@@ -1,3 +1,5 @@
+package scala
+
 import exceptions._
 import scala.collection.mutable
 

@@ -1,3 +1,5 @@
+package scala
+
 import exceptions._
 
 class Account(val bank: Bank, initialBalance: Double) {
