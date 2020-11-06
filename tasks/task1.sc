@@ -16,7 +16,7 @@ def range(start: Int, end: Int): Array[Int] = {
   array
 }
 
-val array50: Array[Int] = range(0, 50 + 1)
+val array50: Array[Int] = range(1, 50 + 1)
 println(array50.mkString("Array(", ", ", ")"))
 
 // B and C
