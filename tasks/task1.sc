@@ -8,14 +8,16 @@
  * @param end The integer one larger than the last integer in the array. end cannot be smaller than start.
  */
 def range(start: Int, end: Int): Array[Int] = {
-  val array: Array[Int] = new Array[Int](end)
+  val offset: Int = end - start
+  val array: Array[Int] = new Array[Int](offset)
   for (i: Int <- start until end) {
-    array(i) = i
+    array(i - start) = i
   }
   array
 }
 
 val array50: Array[Int] = range(0, 50 + 1)
+println(array50.mkString("Array(", ", ", ")"))
 
 // B and C
 
