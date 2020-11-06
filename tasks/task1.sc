@@ -82,17 +82,17 @@ val one = BigInt(1)
  *
  * @param n Index of Fibonacci number to return.
  */
-def Fibonacci(n: BigInt): BigInt = {
+def fibonacci(n: BigInt): BigInt = {
   n match {
     case `zero` => zero
     case `one` => one
-    case _ => Fibonacci(n - 2) + Fibonacci(n - 1)
+    case _ => fibonacci(n - 2) + fibonacci(n - 1)
   }
 }
 
 // Print 0-th to 10-th Fibonacci numbers
 for (i <- 0 until 11) {
-  printf("F%d: %d\n", i, Fibonacci(BigInt(i)))
+  printf("F%d: %d\n", i, fibonacci(BigInt(i)))
 }
 
 // D theory
