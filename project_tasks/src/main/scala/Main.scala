@@ -1,4 +1,3 @@
-
 object Main extends App {
 
     def thread(body: => Unit): Thread = {
@@ -8,5 +7,4 @@ object Main extends App {
         t.start
         t
     }
-  
 }

@@ -65,13 +65,15 @@ object Task2 {
         object B {
             lazy val b = A.a1
         }
-        
+
         def init_a() {
             A.a0
         } 
+        
         def init_b() {
             B.b
         }
+
         val t7 = make_thread(init_a)
         val t8 = make_thread(init_b)
         t7.start
