@@ -13,14 +13,14 @@ class Account(val bank: Bank, initialBalance: Double) {
   def withdraw(amount: Double): Either[Unit, String] = {
 
     if (amount < 0) {
-      return Right[Unit, String]("Amount to be withdrawn cannot be negative.")
+      return Right("Amount to be withdrawn cannot be negative.")
     }
 
     if (balance < amount) {
-      return Right[Unit, String]("Amount to be withdrawn cannot be higher than account balance.")
+      return Right("Amount to be withdrawn cannot be higher than account balance.")
     }
 
-    Left[Unit, String](balance.changeBalance(-amount))
+    Left(balance.changeBalance(-amount))
 
   }
 
@@ -33,10 +33,10 @@ class Account(val bank: Bank, initialBalance: Double) {
   def deposit(amount: Double): Either[Unit, String] = {
 
     if (amount < 0) {
-      return Right[Unit, String]("Amount to be deposited cannot be negative.")
+      return Right("Amount to be deposited cannot be negative.")
     }
 
-    Left[Unit, String](balance.changeBalance(amount))
+    Left(balance.changeBalance(amount))
 
   }
 
