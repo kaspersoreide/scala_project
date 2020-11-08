@@ -11,7 +11,7 @@ class Bank(val allowedAttempts: Integer = 3) {
                 processTransactions
             }
         })        
-        thread.start
+        this.synchronized{thread.start}
     }
 
     private def processTransactions: Unit = {
@@ -27,7 +27,7 @@ class Bank(val allowedAttempts: Integer = 3) {
         if (transaction.status == TransactionStatus.PENDING){ 
             transactionsQueue.push(transaction)
         }
-        else {
+        else if(transaction.status){
             processedTransactions.push(transaction)
         }
         //recursive call so we get through the whole queue

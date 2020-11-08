@@ -59,16 +59,27 @@ class Transaction(val transactionsQueue: TransactionQueue,
             // from withdraw amount
             // to deposit amount
             val withdrawn = from.withdraw(amount)
-            val deposited = to.deposit(amount)
-            deposited match {
-                case _ : Right(String) => {
-                    //give the money back so the money doesnt get withdrawn when deposit fails
-                    if (withdrawn == Left(hei)) from.deposit(amount)
+            withdrawn match {
+                // withdrawal succeeded
+                case Left(unit) => {
+                    val deposited = to.deposit(amount)
+                    deposited match{
+                        // failed depositing
+                        case Right(string) => {
+                            // deposit money back into from-account
+                            from.deposit(amount)
+                        }
+                        // succeeded depositing
+                        case Left(unit) => {
+                            status = TransactionStatus.SUCCESS
+                        }
+                    }
                 }
-                case _ : Left(Unit) => {
-                    if (withdrawn == Left(ja)) status = TransactionStatus.SUCCESS
+                case Right(string) => {
+                    // do nothing
                 }
             }
+            
             attempt += 1
             if (attempt == allowedAttemps) {
                 status = TransactionStatus.FAILED
@@ -78,7 +89,7 @@ class Transaction(val transactionsQueue: TransactionQueue,
         if (status == TransactionStatus.PENDING) {
             this.synchronized {
                 doTransaction
-                Thread.sleep(50)
+                Thread.sleep(100)
             }
         }
     }
