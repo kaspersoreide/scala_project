@@ -6,6 +6,7 @@ object Main extends App {
             override def run() = body
         }
         t.start
+        print("lelelelelel")
         t
     }
   
