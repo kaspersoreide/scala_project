@@ -8,7 +8,7 @@ class Account(val bank: Bank, initialBalance: Double) {
    *
    * Thread-safe. Cannot cause deadlock.
    *
-   * @return Either a left with the unit if successful, or a right with a error message otherwise.
+   * @return Either a left with the unit if successful, or a right with an error message otherwise.
    */
   def withdraw(amount: Double): Either[Unit, String] = {
 
@@ -28,7 +28,7 @@ class Account(val bank: Bank, initialBalance: Double) {
    *
    * Thread-safe. Cannot cause deadlock.
    *
-   * @return Either a left with the unit if successful, or a right with a error message otherwise.
+   * @return Either a left with the unit if successful, or a right with an error message otherwise.
    */
   def deposit(amount: Double): Either[Unit, String] = {
 
