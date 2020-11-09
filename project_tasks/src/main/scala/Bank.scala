@@ -51,5 +51,5 @@ class Bank(val allowedAttempts: Integer = 3) {
     } 
     // Recursive call so we get through the whole queue
     processTransactions()
-  }
-})
+  })
+}
