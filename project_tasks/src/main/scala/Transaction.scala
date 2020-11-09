@@ -64,7 +64,7 @@ class Transaction(val transactionsQueue: TransactionQueue,
       val withdrawn = from.withdraw(amount)
       withdrawn match {
         // withdrawal succeeded
-        case Left(unit) => {
+        case Left(_) => {
           val deposited = to.deposit(amount)
           deposited match {
             // failed depositing
@@ -72,8 +72,8 @@ class Transaction(val transactionsQueue: TransactionQueue,
               // deposit money back into from-account
               from.deposit(amount)
             }
-            case Left(unit) => {
-              // Succeeded depositing, 
+            case Left(_) => {
+              // Succeeded depositing,
               status = TransactionStatus.SUCCESS
             }
           }
