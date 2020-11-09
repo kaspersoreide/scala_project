@@ -56,6 +56,10 @@ class Transaction(val transactionsQueue: TransactionQueue,
   var attempt = 0
 
   override def run: Unit = {
+    /** Does the transaction
+     *
+     *  Withdraws amount from account "from" and deposits it into account "to"
+     */
     def doTransaction(): Unit = {
       val withdrawn = from.withdraw(amount)
       withdrawn match {
@@ -68,19 +72,20 @@ class Transaction(val transactionsQueue: TransactionQueue,
               // deposit money back into from-account
               from.deposit(amount)
             }
-            // succeeded depositing
             case Left(unit) => {
+              // Succeeded depositing, 
               status = TransactionStatus.SUCCESS
             }
           }
         }
         case Right(string) => {
-          // do nothing
+          // Do nothing, because withdrawal failed
         }
       }
 
       attempt += 1
       if (attempt == allowedAttempts && status == TransactionStatus.PENDING) {
+        // too many attempts used
         status = TransactionStatus.FAILED
       }
     }
