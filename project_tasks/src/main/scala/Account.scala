@@ -2,7 +2,7 @@ package scala
 
 class Account(val bank: Bank, initialBalance: Double) {
 
-  val balance = new Balance(initialBalance)
+  private val balance = new Balance(initialBalance)
 
   // TODO
   // for project task 1.2: implement functions
