@@ -20,7 +20,9 @@ class TransactionQueue {
 
     // Return whether the queue is empty
     def isEmpty: Boolean = {
-        queue.isEmpty
+        this.synchronized{
+            queue.isEmpty
+        }
     }
 
     // Add new element to the back of the queue
@@ -32,12 +34,16 @@ class TransactionQueue {
 
     // Return the first element from the queue without removing it
     def peek: Transaction = {
-        queue.front
+        this.synchronized{
+            queue.front
+        }
     }
 
     // Return an iterator to allow you to iterate over the queue
     def iterator: Iterator[Transaction] = {
-        queue.iterator
+        this.synchronized{
+            queue.iterator
+        }
     }
 }
 
@@ -52,18 +58,13 @@ class Transaction(val transactionsQueue: TransactionQueue,
     var attempt = 0
 
     override def run: Unit = {
-
         def doTransaction() = {
-            // TODO - project task 3
-            // Extend this method to satisfy requirements.
-            // from withdraw amount
-            // to deposit amount
             val withdrawn = from.withdraw(amount)
             withdrawn match {
                 // withdrawal succeeded
                 case Left(unit) => {
                     val deposited = to.deposit(amount)
-                    deposited match{
+                    deposited match {
                         // failed depositing
                         case Right(string) => {
                             // deposit money back into from-account
@@ -81,7 +82,7 @@ class Transaction(val transactionsQueue: TransactionQueue,
             }
             
             attempt += 1
-            if (attempt == allowedAttemps) {
+            if (attempt == allowedAttemps && status == TransactionStatus.PENDING) {
                 status = TransactionStatus.FAILED
             }
         }

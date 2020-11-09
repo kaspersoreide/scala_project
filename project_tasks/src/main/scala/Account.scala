@@ -35,6 +35,4 @@ class Account(val bank: Bank, initialBalance: Double) {
     def transferTo(account: Account, amount: Double) = {
         bank.addTransactionToQueue (this, account, amount)
     }
-
-
 }
