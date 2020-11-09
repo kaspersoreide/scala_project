@@ -5,15 +5,13 @@ class Bank(val allowedAttempts: Integer = 3) {
   private val transactionsQueue: TransactionQueue = new TransactionQueue()
   private val processedTransactions: TransactionQueue = new TransactionQueue()
 
-  def addTransactionToQueue(from: Account, to: Account, amount: Double): Unit = {
-    this.synchronized {
-      val transaction = new Transaction(transactionsQueue, processedTransactions, from, to, amount, allowedAttempts)
-      transactionsQueue.push(transaction)
-      Main.thread({
-        processTransactions()
-      })
-    }
-  }
+  def addTransactionToQueue(from: Account, to: Account, amount: Double): Unit = this.synchronized({
+    val transaction = new Transaction(transactionsQueue, processedTransactions, from, to, amount, allowedAttempts)
+    transactionsQueue.push(transaction)
+    Main.thread({
+      processTransactions()
+    })
+  })
 
   def addAccount(initialBalance: Double): Account = {
     new Account(this, initialBalance)
