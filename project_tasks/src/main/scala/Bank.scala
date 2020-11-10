@@ -15,7 +15,7 @@ class Bank(val allowedAttempts: Integer = 3) {
     transactionsQueue.push(new Transaction(transactionsQueue, processedTransactions, from, to, amount, allowedAttempts))
     executorContext.submit(new Runnable {
       override def run(): Unit = {
-        processTransactions
+        processTransactions()
       }
     })
   }
@@ -33,7 +33,7 @@ class Bank(val allowedAttempts: Integer = 3) {
    * All transactions are popped from the queue and run. If a transaction is pending it is pushed back.
    * The function calls itself until the queue is empty.
    */
-  private def processTransactions: Unit = {
+  private def processTransactions(): Unit = {
     val transaction = transactionsQueue.pop
     transaction.run()
 
@@ -41,7 +41,7 @@ class Bank(val allowedAttempts: Integer = 3) {
       transactionsQueue.push(transaction)
       executorContext.submit(new Runnable {
         override def run(): Unit = {
-          processTransactions
+          processTransactions()
         }
       })
     }
