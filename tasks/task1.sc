@@ -1,8 +1,8 @@
 // Task 1
 
-// Subtask A
+// A
 
-/** Return an array containing whole numbers from start to end. */
+/** Return an array containing first 50 integers */
 def range() : Array[Int] = {
   var arr = new Array[Int](50)
   for( i <- 0 to 49)
