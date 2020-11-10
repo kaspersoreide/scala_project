@@ -1,13 +1,13 @@
 object Task1 {
 
-  // A
-
+  // Field used in A, B and C
   val array50: Array[Int] = range()
-  val zero = BigInt(0)
-  val one = BigInt(1)
 
+  // Fields used in D
+  val zero: BigInt = BigInt(0)
+  val one: BigInt = BigInt(1)
 
-  // B
+  // A
 
   /** Return an array containing first 50 integers */
   def range(): Array[Int] = {
@@ -22,7 +22,7 @@ object Task1 {
     println(array50.mkString("Array(", ", ", ")"))
   }
 
-  // C
+  // B
 
   /** Returns the sum of the integers in iterable.
    *
@@ -42,6 +42,8 @@ object Task1 {
     printf(array50.mkString("", " + ", " = %d\n"), sumLoop(array50))
   }
 
+  // C
+
   /** Returns the sum of the integers in iterator.
    *
    * This method employs recursion to calculate the sum.
@@ -56,10 +58,6 @@ object Task1 {
     }
   }
 
-  // D
-
-  import scala.math.BigInt
-
   /** Returns the sum of the integers in iterable.
    *
    * This method employs recursion to calculate the sum.
@@ -73,6 +71,10 @@ object Task1 {
   def demonstrateC(): Unit = {
     printf(array50.mkString("", " + ", " = %d\n"), sumRecursion(array50))
   }
+
+  // D
+
+  import scala.math.BigInt
 
   /** Returns the n-th Fibonacci number.
    *
