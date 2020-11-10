@@ -2,12 +2,41 @@ object Task2 {
 
   // A
 
-  def main(args: Array[String]): Unit = {
-    demonstrateB()
-    demonstrateD()
+  /** Return a new not started thread with the supplied body.
+   *
+   * @param body Code block body created thread.
+   */
+  def thread(body: => Unit): Thread = {
+    new Thread {
+      override def run(): Unit = body
+    }
   }
+  
 
   // B (with modifications from C)
+
+  object Counter {
+
+    private var counter: Int = 0
+
+    /** Increase this counter by one.
+     *
+     * Thread-safe.
+     */
+    def increaseCounter(): Unit = this.synchronized({
+      counter += 1
+    })
+
+    /** Print this counter to console. */
+    def print(): Unit = {
+      println(counter)
+    }
+
+    /** Reset this counter to 0. */
+    def reset(): Unit = this.synchronized({
+      counter = 0
+    })
+  }
 
   def demonstrateB(): Unit = {
     //Test task C
@@ -35,22 +64,13 @@ object Task2 {
     // Does not proceed until all the threads are done, so one iteration cannot affect the next.
   }
 
-  /** Return a new not started thread with the supplied body.
-   *
-   * @param body Code block body created thread.
-   */
-  def thread(body: => Unit): Thread = {
-    new Thread {
-      override def run(): Unit = body
-    }
-  }
-
   // The function is non-deterministic. The execution order of the threads in this function is not determined in advance
   // causing a non-deterministic outcome. This means that the function can give different results for the same input.
   //
   // In this case we see a specific case called a race-condition. This happens when threads compete for the same resource.
   // Thread t1, t2, and t3 all use the same Counter object with no exectuion order, printing different results each time
   // depending on when the print-thread executed.
+
 
   // C
 
@@ -93,27 +113,9 @@ object Task2 {
     println("Got past deadlock!! Finally!! 😭😭😭😭") // In practice unreachable
   }
 
-  object Counter {
-
-    private var counter: Int = 0
-
-    /** Increase this counter by one.
-     *
-     * Thread-safe.
-     */
-    def increaseCounter(): Unit = this.synchronized({
-      counter += 1
-    })
-
-    /** Print this counter to console. */
-    def print(): Unit = {
-      println(counter)
-    }
-
-    /** Reset this counter to 0. */
-    def reset(): Unit = this.synchronized({
-      counter = 0
-    })
+  def main(args: Array[String]): Unit = {
+    demonstrateB()
+    demonstrateD()
   }
 
 }
