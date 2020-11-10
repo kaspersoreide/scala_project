@@ -1,48 +1,41 @@
-package scala
-
+import exceptions._
 import scala.collection.mutable
+
+object TransactionStatus extends Enumeration {
+  val SUCCESS, PENDING, FAILED = Value
+}
 
 class TransactionQueue {
 
-  // TODO
-  // project task 1.1
-  // Add datastructure to contain the transactions
-  private val queue = new mutable.Queue[Transaction]()
+    // TODO
+    // project task 1.1
+    // Add datastructure to contain the transactions
+    var queueOfTransactions = new mutable.Queue[Transaction]()
 
-  // Remove and return the first element from the queue
-  def pop: Transaction = {
-    this.synchronized {
-      queue.dequeue
+    // Remove and return the first element from the queue
+    def pop: Transaction = this.synchronized {
+      queueOfTransactions.dequeue
     }
-  }
 
-  // Return whether the queue is empty
-  def isEmpty: Boolean = {
-    this.synchronized {
-      queue.isEmpty
+    // Return whether the queue is empty
+    def isEmpty: Boolean = this.synchronized {
+      queueOfTransactions.isEmpty
     }
-  }
 
-  // Add new element to the back of the queue
-  def push(t: Transaction): Unit = {
-    this.synchronized {
-      queue += t
+    // Add new element to the back of the queue
+    def push(t: Transaction): Unit = this.synchronized {
+      queueOfTransactions.enqueue(t)
     }
-  }
 
-  // Return the first element from the queue without removing it
-  def peek: Transaction = {
-    this.synchronized {
-      queue.front
+    // Return the first element from the queue without removing it
+    def peek: Transaction = this.synchronized {
+      queueOfTransactions.front
     }
-  }
 
-  // Return an iterator to allow you to iterate over the queue
-  def iterator: Iterator[Transaction] = {
-    this.synchronized {
-      queue.iterator
+    // Return an iterator to allow you to iterate over the queue
+    def iterator: Iterator[Transaction] = this.synchronized {
+      queueOfTransactions.iterator
     }
-  }
 }
 
 class Transaction(val transactionsQueue: TransactionQueue,
@@ -50,55 +43,49 @@ class Transaction(val transactionsQueue: TransactionQueue,
                   val from: Account,
                   val to: Account,
                   val amount: Double,
-                  val allowedAttempts: Int) extends Runnable {
+                  val allowedAttemps: Int) extends Runnable {
 
   var status: TransactionStatus.Value = TransactionStatus.PENDING
   var attempt = 0
 
   override def run: Unit = {
-    /** Does the transaction
-     *
-     *  Withdraws amount from account "from" and deposits it into account "to"
-     */
-    def doTransaction(): Unit = {
-      val withdrawn = from.withdraw(amount)
-      withdrawn match {
-        // withdrawal succeeded
-        case Left(_) => {
-          val deposited = to.deposit(amount)
-          deposited match {
-            // failed depositing
-            case Right(string) => {
-              // deposit money back into from-account
-              from.deposit(amount)
-            }
-            case Left(_) => {
-              // Succeeded depositing,
-              status = TransactionStatus.SUCCESS
+
+      def doTransaction() = {
+        // TODO - project task 3
+        // Extend this method to satisfy requirements.
+        from withdraw amount match {
+          // Withdrawal succeded
+          case Left(unit) => {
+            to deposit amount match {
+              // Depositing failed
+              case Right(string) => {
+                // Deposit money back to sender
+                from deposit amount
+              }
+              case Left(unit) => {
+                // Depositing is a success
+                status = TransactionStatus.SUCCESS 
+              }
             }
           }
+          case Right(string) => {
+            // Witdrawal failed, nothing done
+          }
         }
-        case Right(string) => {
-          // Do nothing, because withdrawal failed
+        attempt += 1
+        if (attempt == allowedAttemps && status == TransactionStatus.PENDING) {
+          status = TransactionStatus.FAILED
         }
       }
 
-      attempt += 1
-      if (attempt == allowedAttempts && status == TransactionStatus.PENDING) {
-        // too many attempts used
-        status = TransactionStatus.FAILED
+      // TODO - project task 3
+      // make the code below thread safe
+      if (status == TransactionStatus.PENDING) {
+          doTransaction
+          Thread.sleep(50) // you might want this to make more room for
+                           // new transactions to be added to the queue
       }
-    }
 
-    if (status == TransactionStatus.PENDING) {
-      this.synchronized {
-        doTransaction()
-        Thread.sleep(100)
-      }
-    }
-  }
-}
 
-object TransactionStatus extends Enumeration {
-  val SUCCESS, PENDING, FAILED = Value
+    }
 }
