@@ -1,4 +1,4 @@
-object Task2 {
+object task2 {
 
   // A
 
@@ -68,7 +68,7 @@ object Task2 {
   // causing a non-deterministic outcome. This means that the function can give different results for the same input.
   //
   // In this case we see a specific case called a race-condition. This happens when threads compete for the same resource.
-  // Thread t1, t2, and t3 all use the same Counter object with no exectuion order, printing different results each time
+  // Thread t1, t2, and t3 all use the same Counter object with no execution order, printing different results each time
   // depending on when the print-thread executed.
 
 

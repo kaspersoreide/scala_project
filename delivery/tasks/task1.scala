@@ -1,4 +1,4 @@
-object Task1 {
+object task1 {
 
   // Field used in A, B and C
   val array50: Array[Int] = range()
@@ -11,7 +11,7 @@ object Task1 {
 
   /** Return an array containing first 50 integers */
   def range(): Array[Int] = {
-    var arr = new Array[Int](50)
+    val arr = new Array[Int](50)
     for (i <- 0 to 49) {
       arr(i) = i + 1
     }
@@ -52,7 +52,7 @@ object Task1 {
    */
   def sumRecursion(iterator: Iterator[Int]): Int = {
     if (iterator.hasNext) {
-      iterator.next + sumRecursion(iterator)
+      iterator.next() + sumRecursion(iterator)
     } else {
       0
     }
