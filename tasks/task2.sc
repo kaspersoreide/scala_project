@@ -19,9 +19,9 @@ object Counter {
   private var counter: Int = 0
 
   /** Increase this counter by one. */
-  def increaseCounter(): Unit = this.synchronized(){
+  def increaseCounter(): Unit = this.synchronized({
     counter += 1
-  }
+  })
 
   /** Print this counter to console. */
   def print(): Unit = {
