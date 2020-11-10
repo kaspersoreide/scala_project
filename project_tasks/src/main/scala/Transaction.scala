@@ -1,9 +1,5 @@
 import scala.collection.mutable
 
-object TransactionStatus extends Enumeration {
-  val SUCCESS, PENDING, FAILED = Value
-}
-
 class TransactionQueue {
 
   /** Backing queue of this transaction queue. */
@@ -11,27 +7,27 @@ class TransactionQueue {
 
   /** Remove and return the first element from the queue. */
   def pop: Transaction = this.synchronized({
-      queue.dequeue
+    queue.dequeue
   })
 
   /** Return whether the queue is empty. */
   def isEmpty: Boolean = {
-      queue.isEmpty
+    queue.isEmpty
   }
 
   /** Add new element to the back of the queue. */
   def push(t: Transaction): Unit = this.synchronized({
-      queue += t
+    queue += t
   })
 
   /** Return the first element from the queue without removing it. */
   def peek: Transaction = {
-      queue.front
+    queue.front
   }
 
   /** Return an iterator to allow you to iterate over the queue. */
   def iterator: Iterator[Transaction] = {
-      queue.iterator
+    queue.iterator
   }
 }
 
@@ -48,7 +44,7 @@ class Transaction(val transactionsQueue: TransactionQueue,
   override def run: Unit = {
     /** Does the transaction
      *
-     *  Withdraws amount from account "from" and deposits it into account "to"
+     * Withdraws amount from account "from" and deposits it into account "to"
      */
     def doTransaction(): Unit = {
       from.withdraw(amount) match {
@@ -79,10 +75,14 @@ class Transaction(val transactionsQueue: TransactionQueue,
     }
 
     if (status == TransactionStatus.PENDING) {
-        doTransaction()
-        Thread.sleep(50)
+      doTransaction()
+      Thread.sleep(50)
     }
 
   }
 
+}
+
+object TransactionStatus extends Enumeration {
+  val SUCCESS, PENDING, FAILED = Value
 }
