@@ -54,8 +54,8 @@ for (_ <- 0 until 10) {
 // causing a non-deterministic outcome. This means that the function can give different results for the same input.
 //
 // In this case we see a specific case called a race-condition. This happens when threads compete for the same resource.
-// Thread t1, t2, and t3 all use the same Counter object with no exectuion order, printing different results each time
-// depending on when the print-thread exeuted.
+// Thread t1, t2, and t3 all use the same Counter object with no execution order, printing different results each time
+// depending on when the print-thread executed.
 
 // C
 
@@ -63,7 +63,7 @@ for (_ <- 0 until 10) {
 // is if you call it n times and counter does not increase by n. Making it thread-safe is not inherently connected to
 // race conditions. Thread interference might cause incorrect behaviour.
 //
-// The `counter` field is private, so can only be changed from within the `Task2` object. This means
+// The `counter` field is private, so can only be changed from within the `Counter` object. This means
 // adding `this.synchronized` before the body of the `incrementCounter` method will make it thread-safe. Only one
 // instance of the method can run at a time, leaving no chance for interleaving reading and assignments to and from
 // `counter`.
