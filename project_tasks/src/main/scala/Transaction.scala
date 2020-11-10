@@ -61,14 +61,14 @@ class Transaction(val transactionsQueue: TransactionQueue,
      *  Withdraws amount from account "from" and deposits it into account "to"
      */
     def doTransaction(): Unit = {
-      from.withdraw(amount) match {
+      from withdraw amount match {
         // withdrawal succeeded
         case Left(_) => {
-          to.deposit(amount) match {
+          to deposit amount match {
             // failed depositing
             case Right(string) => {
               // deposit money back into from-account
-              from.deposit(amount)
+              from deposit amount
             }
             case Left(_) => {
               // Succeeded depositing,
