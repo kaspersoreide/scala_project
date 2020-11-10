@@ -1,27 +1,23 @@
 // Task 1
 
-// A
+// Subtask A
 
-/** Return an array containing whole numbers from start to end.
- *
- * @param start The first integer in the array.
- * @param end The integer one larger than the last integer in the array. end cannot be smaller than start.
- */
-def range(start: Int, end: Int): Array[Int] = {
-  val offset: Int = end - start
-  val array: Array[Int] = new Array[Int](offset)
-  for (i: Int <- start until end) {
-    array(i - start) = i
+/** Return an array containing whole numbers from start to end. */
+def range() : Array[Int] = {
+  var arr = new Array[Int](50)
+  for( i <- 0 to 49)
+  {
+    arr(i) = i+1
   }
-  array
+  arr
 }
 
-val array50: Array[Int] = range(1, 50 + 1)
+val array50: Array[Int] = range()
 println(array50.mkString("Array(", ", ", ")"))
 
 // B and C
 
-object sum {
+object Sum {
 
   // B definition
   /** Returns the sum of the integers in iterable.
@@ -66,13 +62,12 @@ object sum {
 }
 
 // B demonstration
-printf(array50.mkString("", " + ", " = %d"), sum.loop(array50))
+printf(array50.mkString("", " + ", " = %d"), Sum.loop(array50))
 
 // C demonstration
-printf(array50.mkString("", " + ", " = %d"), sum.recursion(array50))
+printf(array50.mkString("", " + ", " = %d"), Sum.recursion(array50))
 
 // D
-
 import scala.math.BigInt
 
 val zero = BigInt(0)
@@ -96,6 +91,6 @@ for (i <- 0 until 11) {
 }
 
 // D theory
-// int is a signed list of bits 32 long representing whole numbers. BigInt is theoretically an arbitrary size integer,
+// Int is a signed list of bits 32 long representing whole numbers. BigInt is theoretically an arbitrary size integer,
 // and can therefore hold, or represent, much larger whole numbers. Implementations seem to have a limit of about 2 to
 // the power of the max value of int. Operations on ints will typically perform better.
