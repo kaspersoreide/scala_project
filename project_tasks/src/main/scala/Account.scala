@@ -1,42 +1,37 @@
-package scala
+import exceptions._
 
 class Account(val bank: Bank, initialBalance: Double) {
 
-  private val balance = new Balance(initialBalance)
+    class Balance(var amount: Double) {}
 
-  /** Remove supplied amount from this account.
-   *
-   * @return Either a left with the unit if successful, or a right with an error message otherwise.
-   */
-  def withdraw(amount: Double): Either[Unit, String] = this.synchronized {
-    if (amount > this.balance.amount || amount < 0) {
-      return Right("Error: Invalid withdrawal (results in negative amount)!")
+    val balance = new Balance(initialBalance)
+
+    // TODO
+    // for project task 1.2: implement functions
+    // for project task 1.3: change return type and update function bodies
+    def withdraw(amount: Double): Either[Unit, String] = this.synchronized {
+        if(amount < 0)
+            return Right("A negative amount cannot be withdrawn.")
+        else if(amount > getBalanceAmount)
+            return Right("An amount larger than the balance cannot be withdrawn.")
+
+        Left(this.balance.amount -= amount)
     }
-    Left(this.balance.amount -= amount)
-  }
 
-  /** Add supplied amount to this account.
-   *
-   * @return Either a left with the unit if successful, or a right with an error message otherwise.
-   */
-  def deposit(amount: Double): Either[Unit, String] = this.synchronized({
-    if (amount <= 0) {
-      return Right("Error: amount is 0 or negative")
+    def deposit (amount: Double): Either[Unit, String] = this.synchronized {
+        if(amount < 0)
+            return Right("A negative amount cannot be deposited.")
+
+        Left(this.balance.amount += amount)
     }
-    Left(this.balance.amount += amount)
-  })
+    
+    def getBalanceAmount: Double = this.synchronized {
+        this.balance.amount
+    }
 
-  /** Returns amount in the balance of this account.
-   *
-   * Makes no changes to this account.
-   */
-  def getBalanceAmount: Double = {
-    this.balance.amount
-  }
+    def transferTo(account: Account, amount: Double) = this.synchronized {
+        bank addTransactionToQueue (this, account, amount)
+    }
 
-  def transferTo(account: Account, amount: Double): Unit = {
-    bank.addTransactionToQueue(this, account, amount)
-  }
 
-  class Balance(var amount: Double) {}
 }
