@@ -1,5 +1,3 @@
-package scala
-
 object Main extends App {
 
   def thread(body: => Unit): Thread = {

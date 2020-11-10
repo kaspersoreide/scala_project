@@ -1,19 +1,16 @@
-package scala
-
 class Account(val bank: Bank, initialBalance: Double) {
 
   private val balance = new Balance(initialBalance)
-
-  /** Remove supplied amount from this account.
-   *
-   * @return Either a left with the unit if successful, or a right with an error message otherwise.
+  /** Withdraws supplied amount from this account.
+   * 
+   *  @return Either a left with the unit if successful, or a right with an error message otherwise.
    */
-  def withdraw(amount: Double): Either[Unit, String] = this.synchronized {
+  def withdraw(amount: Double): Either[Unit, String] = this.synchronized({
     if (amount > this.balance.amount || amount < 0) {
-      return Right("Error: Invalid withdrawal (results in negative amount)!")
+      return Right("Error: Invalid withdrawal (results in negative amoun()!")
     }
     Left(this.balance.amount -= amount)
-  }
+  })
 
   /** Add supplied amount to this account.
    *

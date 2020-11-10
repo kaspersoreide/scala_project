@@ -1,47 +1,37 @@
-package scala
-
 import scala.collection.mutable
+
+object TransactionStatus extends Enumeration {
+  val SUCCESS, PENDING, FAILED = Value
+}
 
 class TransactionQueue {
 
-  // TODO
-  // project task 1.1
-  // Add datastructure to contain the transactions
+  /** Backing queue of this transaction queue. */
   private val queue = new mutable.Queue[Transaction]()
 
-  // Remove and return the first element from the queue
-  def pop: Transaction = {
-    this.synchronized {
+  /** Remove and return the first element from the queue. */
+  def pop: Transaction = this.synchronized({
       queue.dequeue
-    }
-  }
+  })
 
-  // Return whether the queue is empty
+  /** Return whether the queue is empty. */
   def isEmpty: Boolean = {
-    this.synchronized {
       queue.isEmpty
-    }
   }
 
-  // Add new element to the back of the queue
-  def push(t: Transaction): Unit = {
-    this.synchronized {
+  /** Add new element to the back of the queue. */
+  def push(t: Transaction): Unit = this.synchronized({
       queue += t
-    }
-  }
+  })
 
-  // Return the first element from the queue without removing it
+  /** Return the first element from the queue without removing it. */
   def peek: Transaction = {
-    this.synchronized {
       queue.front
-    }
   }
 
-  // Return an iterator to allow you to iterate over the queue
+  /** Return an iterator to allow you to iterate over the queue. */
   def iterator: Iterator[Transaction] = {
-    this.synchronized {
       queue.iterator
-    }
   }
 }
 
@@ -61,14 +51,14 @@ class Transaction(val transactionsQueue: TransactionQueue,
      *  Withdraws amount from account "from" and deposits it into account "to"
      */
     def doTransaction(): Unit = {
-      from withdraw amount match {
+      from.withdraw(amount) match {
         // withdrawal succeeded
         case Left(_) => {
-          to deposit amount match {
+          to.deposit(amount) match {
             // failed depositing
             case Right(string) => {
               // deposit money back into from-account
-              from deposit amount
+              from.deposit(amount)
             }
             case Left(_) => {
               // Succeeded depositing,
@@ -89,14 +79,10 @@ class Transaction(val transactionsQueue: TransactionQueue,
     }
 
     if (status == TransactionStatus.PENDING) {
-      this.synchronized {
         doTransaction()
-        Thread.sleep(100)
-      }
+        Thread.sleep(50)
     }
-  }
-}
 
-object TransactionStatus extends Enumeration {
-  val SUCCESS, PENDING, FAILED = Value
+  }
+
 }
