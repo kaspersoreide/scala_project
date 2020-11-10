@@ -1,55 +1,55 @@
-package scala
+import java.util.concurrent.Executors
 
 class Bank(val allowedAttempts: Integer = 3) {
 
-  private val transactionsQueue: TransactionQueue = new TransactionQueue()
-  private val processedTransactions: TransactionQueue = new TransactionQueue()
-  /** Adds new transaction to queue
-   *  
-   *  Creates a new instance of Transaction and pushes it to transactionsQueue,
-   *  and creates a new thread to process transactions.
-   */
+    private val transactionsQueue: TransactionQueue = new TransactionQueue()
+    private val processedTransactions: TransactionQueue = new TransactionQueue()
+    private val executorContext = Executors newFixedThreadPool(100)
 
-  def addTransactionToQueue(from: Account, to: Account, amount: Double): Unit = this.synchronized({
-    val transaction = new Transaction(transactionsQueue, processedTransactions, from, to, amount, allowedAttempts)
-    transactionsQueue.push(transaction)
-    Main.thread({
-      processTransactions()
-    })
-  })
+    def addTransactionToQueue(from: Account, to: Account, amount: Double): Unit = {
+        // TODO
+        // project task 2
+        // create a new transaction object and put it in the queue
+        // spawn a thread that calls processTransactions
 
-  def addAccount(initialBalance: Double): Account = {
-    new Account(this, initialBalance)
-  }
-
-  def getProcessedTransactionsAsList: List[Transaction] = {
-    processedTransactions.iterator.toList
-  }
-  
-  /** Goes through the queue and processes transactions
-   *
-   *  All transactions are popped from the queue and run. If a transaction is pending it is pushed back.
-   *  The function calls itself until the queue is empty.
-   */
-  private def processTransactions(): Unit = this.synchronized({
-    if (transactionsQueue.isEmpty) {
-      // Nothing to do, return.
-      return
+        transactionsQueue push new Transaction(transactionsQueue, processedTransactions, from, to, amount, allowedAttempts)
+        executorContext submit new Runnable {
+            override def run(): Unit = {
+                processTransactions
+            }
+        }
     }
-    
-    // Pop a transaction off the queue, and start a new thread executing it.
-    val transaction = transactionsQueue.pop
-    val transThread = new Thread(transaction)
-    transThread.start()
-    if (transaction.status == TransactionStatus.PENDING) {
-      // Transaction must be processed.
-      transactionsQueue.push(transaction)
+
+    private def processTransactions: Unit = {
+        // TOO
+        // project task 2
+        // Function that pops a transaction from the queue
+        // and spawns a thread to execute the transaction.
+        // Finally do the appropriate thing, depending on whether
+        // the transaction succeeded or not
+
+        val transaction = transactionsQueue.pop
+        transaction run
+
+        if(transaction.status == TransactionStatus.PENDING){
+            transactionsQueue push transaction
+            executorContext submit new Runnable {
+                override def run(): Unit = {
+                    processTransactions
+                }
+            }
+        }
+        else {
+            processedTransactions push transaction
+        }
     }
-    else {
-      // Transaction is processed.
-      processedTransactions.push(transaction)
-    } 
-    // Recursive call so we get through the whole queue
-    processTransactions()
-  })
+
+    def addAccount(initialBalance: Double): Account = {
+        new Account(this, initialBalance)
+    }
+
+    def getProcessedTransactionsAsList: List[Transaction] = {
+        processedTransactions.iterator.toList
+    }
+
 }
